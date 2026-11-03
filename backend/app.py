@@ -1,9 +1,9 @@
-import llm
 import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+import llm
 import tickets
 from db import init_db
 
@@ -49,6 +49,7 @@ def resolve(ticket_id):
         return jsonify(error=f"Ticket {ticket_id} not found"), 404
     return jsonify(row)
 
+
 def speak_list(rows, f):
     if not rows:
         return "I found no matching tickets."
@@ -74,6 +75,12 @@ def command():
 
     intent = cmd["intent"]
     if intent == "create":
+        dup = tickets.find_duplicate(cmd["category"], cmd["location"], cmd["issue"])
+        if dup:
+            t = tickets.add_report(dup["id"], cmd["priority"], cmd["priority_reason"])
+            reply = (f"This was already reported. I've added your report to ticket {t['id']}. "
+                     f"It now has {t['report_count']} reports.")
+            return jsonify(intent="duplicate", reply=reply, ticket=t)
         t = tickets.create_ticket(cmd["category"], cmd["location"], cmd["issue"],
                                   cmd["priority"], cmd["priority_reason"], cmd["time_constraint"])
         where = f" for {t['location']}" if t["location"] else ""

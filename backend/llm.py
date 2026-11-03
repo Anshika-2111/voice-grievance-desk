@@ -24,7 +24,8 @@ Decide ONE intent and reply with JSON only, exactly this shape:
   "filters": {"status": "open"|"resolved"|null, "priority": string|null, "category": string|null, "location": string|null}
 }
 Rules:
-- create: a person reports a problem. category is one of: maintenance, hostel, library, academic, it, safety, other. Fill location, a short issue, time_constraint if any deadline is mentioned (else null), priority and a short priority_reason that names the real factors (for example "Practical in 2 hours + equipment failure").
+- create: a person reports a problem. category is one of: maintenance, hostel, library, academic, it, safety, other. Use maintenance for AC, fans, lights, projectors, furniture, water, plumbing, electrical and equipment failures. Use it only for wifi, internet, computers and software. Fill location, a short issue, time_constraint if any deadline is mentioned (else null), priority and a short priority_reason that names the real factors (for example "Practical in 2 hours + equipment failure").
+- Always write location in a short consistent form like "Room 204", "Lab 204", "Hostel B" (keep the type word and the number or letter, drop filler words such as "number"). Broken equipment in a room, lab or hall of an academic building is maintenance, never hostel unless the person says hostel.
 - Priority: critical = danger to health or safety (fire, electric shock, gas leak, injury). high = blocks urgent work or has a near deadline. medium = real problem, no urgency. low = minor or cosmetic.
 - list: an admin wants to see tickets. Put only what they asked for in filters. If they do not say resolved or all, use status "open".
 - resolve: an admin wants to close a ticket. Set ticket_id as a plain integer (convert spoken numbers such as "ten forty two" to 1042).

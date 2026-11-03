@@ -137,7 +137,7 @@ export default function App() {
           <tbody>
             {tickets.map((t) => (
               <tr key={t.id} className={`p-${t.priority} ${t.status === "resolved" ? "done" : ""}`}>
-                <td>{t.id}</td>
+                <td>{t.id}{t.report_count > 1 && <div className="why">👥 {t.report_count} reports</div>}</td>
                 <td>{t.location || "—"}<div className="why">{t.category}</div></td>
                 <td>{t.issue}</td>
                 <td><span className={`badge ${t.priority}`}>{t.priority}</span>
